@@ -18,11 +18,11 @@ router.get("/",function(req,res) {
 
 
 
-var salt = bcrypt.genSaltSync(10);
+var salt =  bcrypt.genSaltSync(10);
 
 //User registration process
 router.post("/register", async (req,res) => {
-    var hash = bcrypt.hashSync(req.body.password)
+    var hash = await bcrypt.hashSync(req.body.password)
     const firstName  = req.body.firstName;
     const lastName  = req.body.lastName;
     const userEmail  = req.body.userEmail;
@@ -54,14 +54,14 @@ router.post("/register", async (req,res) => {
 // Signin/Login
 router.post("/signin", async(req,res) => {
     const userEmail = await User.findOne({userEmail : req.body.userEmail});
-    const check = bcrypt.compareSync(req.body.password, user.password);
+    const check = bcrypt.compareSync(req.body.password, User.password);
 
     if(!(userEmail && check)){
         return res.status(401).send("Invalid Credentials");
     }
     
 
-    const token = authFile.getToken(user._id);
+    const token = authFile.getToken(User._id);
     return res.send(token);
 
 })
