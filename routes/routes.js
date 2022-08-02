@@ -23,16 +23,16 @@ var salt = bcrypt.genSaltSync(10);
 //User registration process
 router.post("/register", async (req,res) => {
     var hash = bcrypt.hashSync(req.body.password)
-    const fname  = req.body.firstName;
-    const lname  = req.body.lastName;
-    const useremail  = req.body.userEmail;
+    const firstName  = req.body.firstName;
+    const lastName  = req.body.lastName;
+    const userEmail  = req.body.userEmail;
     const Password  = req.body.password;
 
 
-    if(!(fname && lname && useremail && Password)){
+    if(!(firstName && lastName && userEmail && Password)){
         return res.status(400).send("You are missing something");
     }
-    else if (fname === lname) {
+    else if (firstName === lastName) {
         return res.status(400).send("FirstName and LastName should not be same");
     }
     else if (Password.length < 8) {
@@ -53,12 +53,10 @@ router.post("/register", async (req,res) => {
 
 // Signin/Login
 router.post("/signin", async(req,res) => {
-    const user = await User.findOne({userEmail : req.body.userEmail});
-    const fname = await User.findOne({firstName : req.body.firstName});
-    const lname = await User.findOne({lastName : req.body.lastName});
+    const userEmail = await User.findOne({userEmail : req.body.userEmail});
     const check = bcrypt.compareSync(req.body.password, user.password);
 
-    if(!(user && fname && lname && check)){
+    if(!(userEmail && check)){
         return res.status(401).send("Invalid Credentials");
     }
     
