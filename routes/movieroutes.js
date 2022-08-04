@@ -72,10 +72,15 @@ router.get("/findmovies/:movieid", async(req,res) => {
 
 
 //Show Movie
-router.get("/getallmovies", async(req,res) => {
+router.get("/getallmovies",authFile.authenticationChecker,async(req,res) => {
+    try {
+        const moviee = await movie.find({});
+        return res.send(moviee);
+    } catch (error) {
+        console.log(error);
+     return res.send(error);
+    }
     
-    const moviee = await movie.find({});
-    return res.send(moviee);
 })
 
 

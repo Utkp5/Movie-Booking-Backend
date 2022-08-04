@@ -21,15 +21,19 @@ router.get("/",function(req,res) {
 var salt =  bcrypt.genSaltSync(10);
 
 //User registration process
-router.post("/register", async (req,res) => {
-    var hash = await bcrypt.hashSync(req.body.password)
+router.post("/Register", async (req,res) => {
+    var hash = bcrypt.hashSync(req.body.password)
     const firstName  = req.body.firstName;
     const lastName  = req.body.lastName;
     const userEmail  = req.body.userEmail;
     const Password  = req.body.password;
+    const letters = /^[a-zA-Z]*$/;
 
 
-    if(!(firstName && lastName && userEmail && Password)){
+    if ( !(firstName.match(letters)) || !(lastName.match(letters))) {
+        return res.status(400).send("Name Does not contain Special Character")
+    }
+    else if(!(firstName && lastName && userEmail && Password)){
         return res.status(400).send("You are missing something");
     }
     else if (firstName === lastName) {
@@ -52,9 +56,9 @@ router.post("/register", async (req,res) => {
 
 
 // Signin/Login
-router.post("/signin", async(req,res) => {
+router.post("/Login", async(req,res) => {
     const userEmail = await User.findOne({userEmail : req.body.userEmail});
-    const check = bcrypt.compareSync(req.body.password, User.password);
+    const check = bcrypt.compareSync(req.body.password, userEmail.password);
 
     if(!(userEmail && check)){
         return res.status(401).send("Invalid Credentials");
@@ -62,7 +66,7 @@ router.post("/signin", async(req,res) => {
     
 
     const token = authFile.getToken(User._id);
-    return res.send(token);
+    return res.send({token : token});
 
 })
 
