@@ -13,20 +13,21 @@ router.get("/", function(req,res) {
 
 //Add movies
 router.post("/addmovies", async(req,res) => {
-    const {movieName,theatre,language,genres,time} = req.body;  //rather than writing individualy we have writen in single line.
+    const {movieName,theatre,language,genres,time,movielbImg} = req.body;  //rather than writing individualy we have writen in single line.
 
-    if (!(movieName && theatre && language && genres && time)){
+    if (!(movieName && theatre && language && genres && time && movielbImg)){
 
         return res.status(400).send("You are missing something");
     }
     else {
         await movie.create({
-            movieName : req.body.movieName,
-            theatre   : req.body.theatre,
-            language  : req.body.language,
-            genres    : req.body.genres,
-            format    : req.body.format,
-            time      : req.body.time,
+            movielbImg  : req.body.movielbImg,
+            movieName   : req.body.movieName,
+            theatre     : req.body.theatre,
+            language    : req.body.language,
+            genres      : req.body.genres,
+            year      : req.body.year,
+            time        : req.body.time,
         });
     }
 
@@ -48,6 +49,7 @@ router.delete("/deletemovies/:id", async(req,res) => {
 
 // Find Movies
 router.get("/findmovies/:movieid", async(req,res) => {
+    
     
     
     if(!movie)

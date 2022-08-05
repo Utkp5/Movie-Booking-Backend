@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema(
             type : String,
             require : true,
         },
+        moviebooked : {
+            type : mongoose.Schema.Types.ObjectId,
+        },
     },
     {
         timestamps : true,
