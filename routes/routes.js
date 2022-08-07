@@ -11,7 +11,13 @@ const authFile = require("../service/authentication");
 // });
 
 router.get("/",function(req,res) {
-    return res.send("user router all ok");
+
+    try {
+        return res.send("user router all ok");
+        
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 
@@ -23,7 +29,7 @@ router.get("/",function(req,res) {
 var salt =  bcrypt.genSaltSync(10);
 
 //User registration process
-router.post("/Register", async (req,res) => {
+router.post("/Register", authFile.authenticationChecker ,async (req,res) => {
 
     try {
         
@@ -56,6 +62,7 @@ router.post("/Register", async (req,res) => {
             });
         }
     return res.send("User Registered Successfully");
+    
     } catch (error) {
         console.log(error);
     }
@@ -64,7 +71,7 @@ router.post("/Register", async (req,res) => {
 
 
 // Signin/Login
-router.post("/Login", async(req,res) => {
+router.post("/Login", authFile.authenticationChecker ,async(req,res) => {
 
     try {
         const userEmail = await User.findOne({userEmail : req.body.userEmail});
@@ -85,7 +92,7 @@ router.post("/Login", async(req,res) => {
 
 
 // Update User password
-router.post("/update", async(req,res) => {
+router.post("/update", authFile.authenticationChecker ,async(req,res) => {
     try {
         
         const id = req.body.id;
@@ -141,7 +148,7 @@ router.get("/getalluser", async (req,res) => {
 
 
 
-//MovieBooked
+//How many movies booked by user  
 router.post("/Moviebook/:movieid", authFile.authenticationChecker, async(req,res) => {
 
     try {
@@ -150,7 +157,7 @@ router.post("/Moviebook/:movieid", authFile.authenticationChecker, async(req,res
     
         const updatedUser = await User.findByIdAndUpdate(userid,{
     
-            moviebooked : movieid
+            moviebooked : movieid,
         },
         {
             new : true,
