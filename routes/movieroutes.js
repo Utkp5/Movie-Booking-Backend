@@ -110,6 +110,8 @@ router.post("/updatemovies", authFile.authenticationChecker ,async(req,res) => {
     }
 });
 
+
+
 //Show Movie
 router.get("/getallmovies", authFile.authenticationChecker ,async(req,res) => {
     try {

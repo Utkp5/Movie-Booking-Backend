@@ -29,7 +29,7 @@ router.get("/",function(req,res) {
 var salt =  bcrypt.genSaltSync(10);
 
 //User registration process
-router.post("/Register", authFile.authenticationChecker ,async (req,res) => {
+router.post("/Register", async (req,res) => {
 
     try {
         
@@ -38,6 +38,7 @@ router.post("/Register", authFile.authenticationChecker ,async (req,res) => {
         const lastName  = req.body.lastName;
         const userEmail  = req.body.userEmail;
         const Password  = req.body.password;
+        const oldUser = await User.findOne({ userEmail });
         const letters = /^[a-zA-Z]*$/;
 
 
@@ -53,6 +54,9 @@ router.post("/Register", authFile.authenticationChecker ,async (req,res) => {
     else if (Password.length < 8) {
       return res.status(400).send( "Your Password must be atleast 8 characters" );
     }
+    else if (oldUser) {
+        return res.status(409).send("User Already Exist. Please Login");
+      }
         else{
             await User.create({
                 firstName : req.body.firstName,
@@ -71,7 +75,7 @@ router.post("/Register", authFile.authenticationChecker ,async (req,res) => {
 
 
 // Signin/Login
-router.post("/Login", authFile.authenticationChecker ,async(req,res) => {
+router.post("/Login", async(req,res) => {
 
     try {
         const userEmail = await User.findOne({userEmail : req.body.userEmail});
