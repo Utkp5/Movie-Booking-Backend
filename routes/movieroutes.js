@@ -64,7 +64,7 @@ router.delete("/deletemovies/:id", authFile.authenticationChecker ,async(req,res
 
 
 // Find Movies
-router.get("/findmovies/:movieid", authFile.authenticationChecker ,async(req,res) => {
+router.get("/findmovies/:movieid", async(req,res) => {
     
     try {
         if(!movie)
