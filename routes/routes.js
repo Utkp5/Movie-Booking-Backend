@@ -78,15 +78,15 @@ router.post("/Register", async (req,res) => {
 router.post("/Login", async(req,res) => {
 
     try {
-        const userEmail = await User.findOne({userEmail : req.body.userEmail});
-        const check = bcrypt.compareSync(req.body.password, userEmail.password);
+        const user = await User.findOne({userEmail : req.body.userEmail});
+        const check = bcrypt.compareSync(req.body.password, user.password);
     
-        if(!(userEmail && check)){
+        if(!(user && check)){
             return res.status(401).send("Invalid Credentials");
         }
         
-        const token = authFile.getToken(User._id);
-        return res.send({token : token});
+        const token = authFile.getToken(user._id);
+        return res.send({token : token,userid : user._id});
 
     } catch (error) {
         console.log(error);
@@ -156,20 +156,18 @@ router.get("/getalluser", async (req,res) => {
 router.post("/Moviebook/:movieid", authFile.authenticationChecker, async(req,res) => {
 
     try {
-        const userid = req.body.userid;
+        const userid = req.body.id;
         const movieid = req.params.movieid;
-    
+        console.log(userid,movieid);
         const updatedUser = await User.findByIdAndUpdate(userid,{
     
-            moviebooked : movieid,
+            $push : {moviebooked : movieid}
         },
         {
             new : true,
             runValidators : true,
         });
-    
-        return res.send(updatedUser);
-        
+        return res.send(updatedUser);        
     } catch (error) {
         console.log(error);
     }
