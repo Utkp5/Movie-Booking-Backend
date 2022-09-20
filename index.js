@@ -3,7 +3,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const logger = require("morgan");
 var cors = require('cors')
-
+const dotenv = require('dotenv');
+dotenv.config();
 
 
 
@@ -27,6 +28,8 @@ const routes = require("./routes/routes")
 const moviesroutes = require("./routes/movieroutes");
 app.use("/api",routes);
 app.use("/api/movies",moviesroutes);
+
+
 
 
 app.listen(PORT,function(error) {
