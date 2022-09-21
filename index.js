@@ -15,7 +15,7 @@ const dbConfig = require("./service/dbConfig");
 dbConfig();
 
 
-
+app.use(express.json());
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json({ limit: "50mb" }));
@@ -26,8 +26,10 @@ app.use(express.urlencoded({ limit: "50mb", extended: false }));
 
 const routes = require("./routes/routes")
 const moviesroutes = require("./routes/movieroutes");
+const Paymentroutes = require("./routes/Payment");
 app.use("/api",routes);
 app.use("/api/movies",moviesroutes);
+app.use("/api/Payment",Paymentroutes);
 
 
 
