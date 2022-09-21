@@ -176,7 +176,7 @@ router.post("/Moviebook/:movieid", authFile.authenticationChecker, async(req,res
 });
 
 
-    //payment mode order and verify
+//payment mode order and verify
     router.post("/orders", async (req, res) => {
         try {
             const instance = new Razorpay({
