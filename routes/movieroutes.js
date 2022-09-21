@@ -126,4 +126,5 @@ router.get("/getallmovies", authFile.authenticationChecker ,async(req,res) => {
 })
 
 
+
 module.exports = router;
