@@ -44,7 +44,7 @@ router.post("/verify", async (req, res) => {
 			return res.status(400).json({ message: "Invalid signature sent!" });
 		}
 	} catch (error) {
-		res.status(500).json({ message: "Internal Server Error!" });
+		res.status(500).send("Internal Server Error!" );
 		console.log(error);
 	}
 });
